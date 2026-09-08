@@ -1,0 +1,22 @@
+services:
+  laravel:
+    image: felipe89/fgonzalez:latest
+    networks:
+      net_fgonzalez:
+    volumes:
+      - ./:/var/www/html
+      - ./storage/logs:/var/logs
+      - vendor:/var/www/html/vendor
+      - composer_cache:/tmp/composer
+    ports:
+      - 127.0.0.1:80
+    command: >
+      sh -c 'composer install
+      && rm -Rf public/storage || true && php artisan storage:link
+      && php artisan serve --host=0.0.0.0 --port=80'
+volumes:
+  vendor:
+  composer_cache:
+
+networks:
+  net_fgonzalez:
