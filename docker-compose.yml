@@ -1,21 +1,38 @@
 services:
   laravel:
     image: felipe89/fgonzalez:latest
+
+    container_name: fgonzalez-dev
+
     networks:
-      net_fgonzalez:
+      - net_fgonzalez
+
     volumes:
       - ./:/var/www/html
-      - ./storage/logs:/var/logs
       - vendor:/var/www/html/vendor
+      - node_modules:/var/www/html/node_modules
       - composer_cache:/tmp/composer
+
     ports:
-      - 127.0.0.1:80
+      - "80:80"
+      - "5173:5173"
+
     command: >
-      sh -c 'composer install
-      && rm -Rf public/storage || true && php artisan storage:link
-      && php artisan serve --host=0.0.0.0 --port=80'
+      sh -c '
+      mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache &&
+      touch database/database.sqlite &&
+      chmod -R 777 storage bootstrap/cache database &&
+      composer install &&
+      npm install &&
+      (rm -rf public/storage || true) &&
+      php artisan storage:link &&
+      (npm run dev -- --host 0.0.0.0 &) &&
+      exec apache2-foreground
+      '
+
 volumes:
   vendor:
+  node_modules:
   composer_cache:
 
 networks:
