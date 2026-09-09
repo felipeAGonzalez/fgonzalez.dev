@@ -14,6 +14,17 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $response
+            ->assertOk()
+            ->assertViewIs('pages.home')
+            ->assertSee('Felipe A. Gonzalez')
+            ->assertSee('id="proyectos"', false)
+            ->assertSee('id="contacto"', false);
+    }
+
+    public function test_brand_assets_are_configured_and_available(): void
+    {
+        $this->assertFileExists(base_path(config('brand.assets.isotype')));
+        $this->assertFileExists(base_path(config('brand.assets.logotype')));
     }
 }
