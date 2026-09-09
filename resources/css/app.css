@@ -1,9 +1,118 @@
 @import 'tailwindcss';
 
+@source '../views/**/*.blade.php';
+@source '../js/**/*.js';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-canvas: #06101e;
+    --color-surface: #0b1929;
+    --color-surface-raised: #102238;
+    --color-foreground: #f8fafc;
+    --color-muted: #cbd5e1;
+    --color-subtle: #94a3b8;
+    --color-metal: #d8e0ea;
+    --color-metal-dark: #64748b;
+    --color-border: #33465d;
+    --color-brand: #2563eb;
+    --color-brand-hover: #3b82f6;
+    --color-brand-light: #60a5fa;
+    --color-accent: #22d3ee;
+    --color-accent-hover: #67e8f9;
+
+    --text-display: clamp(3rem, 7vw, 4.5rem);
+    --text-display--line-height: 1.05;
+    --text-display--letter-spacing: -0.035em;
+
+    --spacing-section: clamp(5rem, 10vw, 8rem);
+    --radius-card: 1.25rem;
+    --shadow-brand: 0 18px 45px rgb(37 99 235 / 0.2);
+    --shadow-card: 0 24px 60px rgb(0 0 0 / 0.2);
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        color-scheme: dark;
+    }
+
+    body {
+        @apply min-h-screen bg-canvas font-sans text-foreground antialiased;
+    }
+
+    a,
+    button {
+        @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-light;
+    }
+}
+
+@layer components {
+    .site-shell {
+        @apply relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_80%_10%,rgb(37_99_235_/_0.09),transparent_28%),linear-gradient(110deg,var(--color-canvas)_0%,#07182b_52%,#0c1623_100%)];
+    }
+
+    .container-page {
+        @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10;
+    }
+
+    .section-space {
+        padding-block: var(--spacing-section);
+    }
+
+    .heading-display {
+        @apply text-display font-bold;
+    }
+
+    .heading-section {
+        @apply mt-4 text-3xl font-bold tracking-tight text-foreground md:text-5xl;
+    }
+
+    .text-body {
+        @apply leading-8 text-muted;
+    }
+
+    .text-gradient {
+        @apply bg-gradient-to-r from-metal via-brand-light to-accent bg-clip-text text-transparent;
+    }
+
+    .eyebrow {
+        @apply flex items-center gap-4 text-sm font-medium tracking-[0.2em] text-muted uppercase;
+    }
+
+    .eyebrow::before {
+        content: '';
+        @apply h-[3px] w-10 shrink-0 bg-accent;
+    }
+
+    .button {
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3 font-medium transition duration-200;
+    }
+
+    .button-primary {
+        @apply bg-gradient-to-r from-brand to-brand-hover text-white shadow-brand hover:-translate-y-0.5 hover:from-brand-hover hover:to-brand-light;
+    }
+
+    .button-secondary {
+        @apply border border-border bg-surface/30 text-metal hover:border-brand-light hover:bg-surface-raised/60 hover:text-foreground;
+    }
+
+    .surface-card {
+        @apply rounded-card border border-metal-dark/30 bg-surface/80 p-6 shadow-card backdrop-blur-sm transition-colors hover:border-brand-light/50;
+    }
+
+    .nav-link {
+        @apply border-b-2 border-transparent pb-2 text-sm font-medium text-muted transition-colors hover:text-brand-light;
+    }
+
+    .nav-link-active {
+        @apply border-brand text-brand-light;
+    }
+
+    .text-link {
+        @apply font-medium text-brand-light underline-offset-4 transition-colors hover:text-accent-hover hover:underline;
+    }
 }
