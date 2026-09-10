@@ -18,6 +18,7 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertViewIs('pages.home')
             ->assertSee('Felipe A. Gonzalez')
+            ->assertSee('Software Developer')
             ->assertSee('id="proyectos"', false)
             ->assertSee('id="contacto"', false);
     }

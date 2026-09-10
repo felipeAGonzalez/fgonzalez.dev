@@ -119,4 +119,45 @@
     .text-link {
         @apply font-medium text-brand-light underline-offset-4 transition-colors hover:text-accent-hover hover:underline;
     }
+
+    .role-tag {
+        @apply flex items-center gap-2;
+    }
+
+    .role-tag::before {
+        content: '';
+        @apply size-1.5 rounded-full bg-accent shadow-[0_0_12px_var(--color-accent)];
+    }
+
+    .hero-visual {
+        @apply relative mx-auto flex aspect-square w-full max-w-[30rem] items-center justify-center;
+    }
+
+    .hero-orbit {
+        @apply absolute rounded-full border border-brand-light/20;
+    }
+
+    .hero-orbit-outer {
+        @apply inset-[5%];
+    }
+
+    .hero-orbit-inner {
+        @apply inset-[18%] border-dashed border-accent/20;
+    }
+
+    .hero-glow {
+        @apply absolute inset-[24%] rounded-full bg-brand/20 blur-3xl;
+    }
+
+    .hero-code {
+        @apply absolute rounded-lg border border-white/10 bg-surface/80 px-3 py-2 font-mono text-xs text-accent shadow-card backdrop-blur;
+    }
+
+    .hero-code-top {
+        @apply top-[13%] right-[4%];
+    }
+
+    .hero-code-bottom {
+        @apply bottom-[15%] left-[5%];
+    }
 }
