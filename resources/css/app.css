@@ -44,6 +44,10 @@
         @apply min-h-screen bg-canvas font-sans text-foreground antialiased;
     }
 
+    ::selection {
+        @apply bg-brand/40 text-foreground;
+    }
+
     a,
     button {
         @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-light;
