@@ -21,7 +21,7 @@
                     :image="$project['image']"
                     :image-alt="$project['image_alt']"
                     :type="$project['type']"
-                    :href="$project['url']"
+                    :href="route('projects.show', $project['slug'])"
                 />
             @endforeach
         </div>
