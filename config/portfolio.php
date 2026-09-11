@@ -7,6 +7,10 @@ return [
         'email' => null,
     ],
 
+    'contact' => [
+        'recipient' => env('PORTFOLIO_CONTACT_RECIPIENT'),
+    ],
+
     'projects' => [
         [
             'slug' => 'cmg',

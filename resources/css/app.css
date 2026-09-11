@@ -173,6 +173,22 @@
         @apply overflow-hidden rounded-card border border-metal-dark/30 bg-surface/80 shadow-card backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-brand-light/50;
     }
 
+    .form-label {
+        @apply mb-2 block text-sm font-medium text-metal;
+    }
+
+    .form-control {
+        @apply w-full rounded-xl border border-metal-dark/40 bg-canvas/60 px-4 py-3 text-foreground transition-colors placeholder:text-subtle focus:border-brand-light focus:outline-none focus:ring-2 focus:ring-brand/30;
+    }
+
+    .form-control[aria-invalid='true'] {
+        @apply border-red-400 focus:border-red-400 focus:ring-red-400/20;
+    }
+
+    .form-error {
+        @apply mt-2 text-sm text-red-300;
+    }
+
     .placeholder-content {
         @apply text-sm leading-7 text-subtle italic;
     }

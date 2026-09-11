@@ -21,6 +21,8 @@
             @include('partials.sections.experience')
         @elseif ($section['id'] === 'sobre-mi')
             @include('partials.sections.about')
+        @elseif ($section['id'] === 'contacto')
+            @include('partials.sections.contact')
         @else
             <section id="{{ $section['id'] }}" class="section-space scroll-mt-24">
                 <div class="container-page">
