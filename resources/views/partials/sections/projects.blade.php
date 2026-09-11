@@ -18,8 +18,10 @@
                     :name="$project['name']"
                     :description="$project['description']"
                     :technologies="$project['technologies']"
-                    :image="$project['image']"
+                    :image="$project['image'] ? Vite::asset($project['image']) : null"
                     :image-alt="$project['image_alt']"
+                    :image-width="$project['image_width']"
+                    :image-height="$project['image_height']"
                     :type="$project['type']"
                     :href="route('projects.show', $project['slug'])"
                 />

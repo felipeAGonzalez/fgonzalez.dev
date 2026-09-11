@@ -28,9 +28,12 @@
                 <div class="aspect-[16/10] overflow-hidden rounded-card border border-metal-dark/30 bg-surface-raised shadow-card">
                     @if ($project['image'])
                         <img
-                            src="{{ $project['image'] }}"
+                            src="{{ Vite::asset($project['image']) }}"
                             alt="{{ $project['image_alt'] ?? "Vista previa del proyecto {$project['name']}" }}"
+                            width="{{ $project['image_width'] }}"
+                            height="{{ $project['image_height'] }}"
                             class="h-full w-full object-cover"
+                            decoding="async"
                         >
                     @else
                         <div class="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,rgb(37_99_235_/_0.2),transparent_65%)]">
