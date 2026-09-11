@@ -119,4 +119,8 @@
     .text-link {
         @apply font-medium text-brand-light underline-offset-4 transition-colors hover:text-accent-hover hover:underline;
     }
+
+    .placeholder-content {
+        @apply text-sm leading-7 text-subtle italic;
+    }
 }

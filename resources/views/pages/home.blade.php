@@ -32,10 +32,14 @@
         ['id' => 'tecnologias', 'label' => 'Herramientas', 'title' => 'Tecnologías'],
         ['id' => 'contacto', 'label' => 'Conversemos', 'title' => 'Contacto'],
     ] as $section)
-        <section id="{{ $section['id'] }}" class="section-space scroll-mt-24">
-            <div class="container-page">
-                <x-ui.section-heading :eyebrow="$section['label']">{{ $section['title'] }}</x-ui.section-heading>
-            </div>
-        </section>
+        @if ($section['id'] === 'sobre-mi')
+            @include('partials.sections.about')
+        @else
+            <section id="{{ $section['id'] }}" class="section-space scroll-mt-24">
+                <div class="container-page">
+                    <x-ui.section-heading :eyebrow="$section['label']">{{ $section['title'] }}</x-ui.section-heading>
+                </div>
+            </section>
+        @endif
     @endforeach
 @endsection
