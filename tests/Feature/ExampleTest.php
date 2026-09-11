@@ -18,8 +18,10 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertViewIs('pages.home')
             ->assertSee('Felipe A. Gonzalez')
+            ->assertSee('Ingeniería en Computación')
             ->assertSee('id="proyectos"', false)
-            ->assertSee('id="contacto"', false);
+            ->assertSee('id="contacto"', false)
+            ->assertSee('aria-controls="mobile-navigation"', false);
     }
 
     public function test_brand_assets_are_configured_and_available(): void
