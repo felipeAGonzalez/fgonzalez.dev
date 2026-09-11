@@ -32,7 +32,9 @@
         ['id' => 'tecnologias', 'label' => 'Herramientas', 'title' => 'Tecnologías'],
         ['id' => 'contacto', 'label' => 'Conversemos', 'title' => 'Contacto'],
     ] as $section)
-        @if ($section['id'] === 'experiencia')
+        @if ($section['id'] === 'tecnologias')
+            @include('partials.sections.technologies')
+        @elseif ($section['id'] === 'experiencia')
             @include('partials.sections.experience')
         @elseif ($section['id'] === 'sobre-mi')
             @include('partials.sections.about')

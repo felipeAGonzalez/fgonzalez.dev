@@ -21,6 +21,7 @@ class ExampleTest extends TestCase
             ->assertSee('Ingeniería en Computación')
             ->assertSee('id="proyectos"', false)
             ->assertSee('id="contacto"', false)
+            ->assertSee('GitLab CI/CD')
             ->assertSee('aria-controls="mobile-navigation"', false);
     }
 
