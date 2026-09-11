@@ -10,11 +10,6 @@
         ['href' => "{$homeUrl}#contacto", 'label' => 'Contacto'],
     ];
 
-    $social = [
-        ['label' => 'GitHub', 'url' => config('portfolio.social.github')],
-        ['label' => 'LinkedIn', 'url' => config('portfolio.social.linkedin')],
-        ['label' => 'Email', 'url' => config('portfolio.social.email')],
-    ];
 @endphp
 
 <header class="site-header" data-site-header>
@@ -30,17 +25,7 @@
             @endforeach
         </nav>
 
-        <div class="hidden items-center gap-3 xl:flex" aria-label="Perfiles y contacto">
-            @foreach ($social as $item)
-                @if ($item['url'])
-                    <a href="{{ $item['url'] }}" class="social-link" target="_blank" rel="noreferrer">{{ $item['label'] }}</a>
-                @else
-                    <span class="social-link cursor-not-allowed opacity-45" aria-disabled="true" title="Pendiente de configurar">
-                        {{ $item['label'] }}
-                    </span>
-                @endif
-            @endforeach
-        </div>
+        <x-ui.professional-links class="hidden items-center gap-3 xl:flex" />
 
         <button
             type="button"
@@ -62,15 +47,7 @@
                 <a href="{{ $item['href'] }}" class="mobile-nav-link">{{ $item['label'] }}</a>
             @endforeach
 
-            <div class="mt-4 flex flex-wrap gap-3 border-t border-white/10 pt-5" aria-label="Perfiles y contacto">
-                @foreach ($social as $item)
-                    @if ($item['url'])
-                        <a href="{{ $item['url'] }}" class="social-link" target="_blank" rel="noreferrer">{{ $item['label'] }}</a>
-                    @else
-                        <span class="social-link cursor-not-allowed opacity-45" aria-disabled="true">{{ $item['label'] }} · pendiente</span>
-                    @endif
-                @endforeach
-            </div>
+            <x-ui.professional-links class="mt-4 flex flex-wrap gap-3 border-t border-white/10 pt-5" pending-suffix />
         </nav>
     </div>
 </header>
