@@ -1,11 +1,13 @@
 @php
+    $homeUrl = route('home');
+
     $navigation = [
-        ['href' => '#inicio', 'label' => 'Inicio'],
-        ['href' => '#proyectos', 'label' => 'Proyectos'],
-        ['href' => '#sobre-mi', 'label' => 'Sobre mí'],
-        ['href' => '#experiencia', 'label' => 'Experiencia'],
-        ['href' => '#tecnologias', 'label' => 'Tecnologías'],
-        ['href' => '#contacto', 'label' => 'Contacto'],
+        ['href' => "{$homeUrl}#inicio", 'label' => 'Inicio'],
+        ['href' => "{$homeUrl}#proyectos", 'label' => 'Proyectos'],
+        ['href' => "{$homeUrl}#sobre-mi", 'label' => 'Sobre mí'],
+        ['href' => "{$homeUrl}#experiencia", 'label' => 'Experiencia'],
+        ['href' => "{$homeUrl}#tecnologias", 'label' => 'Tecnologías'],
+        ['href' => "{$homeUrl}#contacto", 'label' => 'Contacto'],
     ];
 
     $social = [
@@ -17,7 +19,7 @@
 
 <header class="site-header" data-site-header>
     <div class="container-page flex h-20 items-center justify-between gap-6">
-        <a href="#inicio" class="flex min-w-0 items-center gap-3 rounded-lg" aria-label="Felipe A. Gonzalez, ir al inicio">
+        <a href="{{ $homeUrl }}#inicio" class="flex min-w-0 items-center gap-3 rounded-lg" aria-label="Felipe A. Gonzalez, ir al inicio">
             <x-brand.image variant="isotype" alt="" class="size-11 shrink-0" />
             <span class="truncate text-base font-semibold tracking-tight text-foreground sm:text-lg">Felipe A. Gonzalez</span>
         </a>
