@@ -11,6 +11,11 @@ return [
         'recipient' => env('PORTFOLIO_CONTACT_RECIPIENT'),
     ],
 
+    'cv' => [
+        'path' => 'documents/felipe-a-gonzalez-cv.pdf',
+        'download_name' => 'Felipe-A-Gonzalez-CV.pdf',
+    ],
+
     'projects' => [
         [
             'slug' => 'cmg',
