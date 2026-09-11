@@ -4,6 +4,8 @@
     'technologies' => [],
     'image' => null,
     'imageAlt' => null,
+    'imageWidth' => null,
+    'imageHeight' => null,
     'type',
     'href' => null,
 ])
@@ -24,8 +26,16 @@
                 <img
                     src="{{ $image }}"
                     alt="{{ $imageAlt ?? "Vista previa del proyecto {$name}" }}"
+                    @if ($imageWidth)
+                        width="{{ $imageWidth }}"
+                    @endif
+                    @if ($imageHeight)
+                        height="{{ $imageHeight }}"
+                    @endif
                     class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
                     loading="lazy"
+                    decoding="async"
+                    sizes="(min-width: 768px) 50vw, 100vw"
                 >
             @else
                 <div class="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,rgb(37_99_235_/_0.2),transparent_65%)]">
