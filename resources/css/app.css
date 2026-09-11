@@ -59,6 +59,10 @@
         @apply relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_80%_10%,rgb(37_99_235_/_0.09),transparent_28%),linear-gradient(110deg,var(--color-canvas)_0%,#07182b_52%,#0c1623_100%)];
     }
 
+    .site-header {
+        @apply sticky top-0 z-50 border-b border-white/5 bg-canvas/80 backdrop-blur-xl;
+    }
+
     .container-page {
         @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10;
     }
@@ -122,5 +126,69 @@
 
     .tech-chip {
         @apply rounded-full border border-metal-dark/30 bg-canvas/55 px-3 py-1.5 font-mono text-xs text-muted transition-colors group-hover:border-brand-light/30 group-hover:text-metal;
+    }
+    .placeholder-content {
+        @apply text-sm leading-7 text-subtle italic;
+    }
+
+    .timeline {
+        @apply relative ml-3 border-l border-brand-light/25 pl-8 sm:ml-5 sm:pl-12;
+    }
+
+    .timeline-item {
+        @apply relative;
+    }
+
+    .timeline-item + .timeline-item {
+        @apply mt-8;
+    }
+
+    .timeline-marker {
+        @apply absolute top-7 -left-[2.58rem] size-4 rounded-full border-4 border-canvas bg-accent shadow-[0_0_18px_rgb(34_211_238_/_0.5)] sm:-left-[3.58rem];
+    }
+
+    .social-link {
+        @apply rounded-lg border border-white/10 px-3 py-2 text-xs font-medium text-muted transition-colors hover:border-brand-light/50 hover:text-brand-light;
+    }
+
+    .menu-toggle {
+        @apply inline-flex size-11 flex-col items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-surface/60 transition-colors hover:border-brand-light/50;
+    }
+
+    .menu-toggle-line {
+        @apply block h-0.5 w-5 rounded-full bg-metal transition-transform duration-200;
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-line:first-of-type {
+        @apply translate-y-2 rotate-45;
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-line:nth-of-type(2) {
+        @apply opacity-0;
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-line:last-of-type {
+        @apply -translate-y-2 -rotate-45;
+    }
+
+    .mobile-navigation {
+        @apply absolute inset-x-0 top-full max-h-[calc(100svh-5rem)] overflow-y-auto border-b border-white/10 bg-canvas/95 shadow-card backdrop-blur-xl;
+    }
+
+    .mobile-nav-link {
+        @apply rounded-xl px-4 py-3 text-base font-medium text-muted transition-colors hover:bg-surface-raised hover:text-brand-light;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
     }
 }

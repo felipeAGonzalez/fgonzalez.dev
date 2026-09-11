@@ -34,6 +34,10 @@
     ] as $section)
         @if ($section['id'] === 'tecnologias')
             @include('partials.sections.technologies')
+        @elseif ($section['id'] === 'experiencia')
+            @include('partials.sections.experience')
+        @elseif ($section['id'] === 'sobre-mi')
+            @include('partials.sections.about')
         @else
             <section id="{{ $section['id'] }}" class="section-space scroll-mt-24">
                 <div class="container-page">
