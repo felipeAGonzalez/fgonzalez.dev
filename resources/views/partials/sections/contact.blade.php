@@ -38,6 +38,10 @@
                 @endforeach
             </ul>
 
+            <div class="mt-8">
+                <x-ui.cv-link />
+            </div>
+
             @unless (config('portfolio.contact.recipient'))
                 <p class="placeholder-content mt-8 max-w-md">
                     Envío pendiente de configurar: define PORTFOLIO_CONTACT_RECIPIENT para habilitar la entrega de mensajes.
