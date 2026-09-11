@@ -1,11 +1,3 @@
-@php
-    $contactLinks = [
-        ['label' => 'Email', 'url' => config('portfolio.social.email')],
-        ['label' => 'LinkedIn', 'url' => config('portfolio.social.linkedin')],
-        ['label' => 'GitHub', 'url' => config('portfolio.social.github')],
-    ];
-@endphp
-
 <section id="contacto" class="section-space scroll-mt-20">
     <div class="container-page grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <div>
@@ -17,26 +9,11 @@
                 </x-slot:description>
             </x-ui.section-heading>
 
-            <ul class="mt-8 grid max-w-md gap-3" aria-label="Canales profesionales">
-                @foreach ($contactLinks as $link)
-                    <li>
-                        @if ($link['url'])
-                            <a
-                                href="{{ $link['url'] }}"
-                                class="social-link inline-flex"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {{ $link['label'] }}
-                            </a>
-                        @else
-                            <span class="social-link inline-flex cursor-not-allowed opacity-45" aria-disabled="true">
-                                {{ $link['label'] }} · pendiente
-                            </span>
-                        @endif
-                    </li>
-                @endforeach
-            </ul>
+            <x-ui.professional-links
+                label="Canales profesionales"
+                class="mt-8 grid max-w-md gap-3"
+                pending-suffix
+            />
 
             <div class="mt-8">
                 <x-ui.cv-link />

@@ -2,9 +2,9 @@
 
 return [
     'social' => [
-        'github' => 'https://github.com/felipeAGonzalez',
-        'linkedin' => null,
-        'email' => null,
+        'github' => env('PORTFOLIO_GITHUB_URL', 'https://github.com/felipeAGonzalez'),
+        'linkedin' => env('PORTFOLIO_LINKEDIN_URL'),
+        'email' => env('PORTFOLIO_EMAIL'),
     ],
 
     'contact' => [
