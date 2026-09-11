@@ -32,7 +32,9 @@
         ['id' => 'tecnologias', 'label' => 'Herramientas', 'title' => 'Tecnologías'],
         ['id' => 'contacto', 'label' => 'Conversemos', 'title' => 'Contacto'],
     ] as $section)
-        @if ($section['id'] === 'sobre-mi')
+        @if ($section['id'] === 'experiencia')
+            @include('partials.sections.experience')
+        @elseif ($section['id'] === 'sobre-mi')
             @include('partials.sections.about')
         @else
             <section id="{{ $section['id'] }}" class="section-space scroll-mt-24">
