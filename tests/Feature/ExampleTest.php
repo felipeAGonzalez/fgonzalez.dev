@@ -19,7 +19,8 @@ class ExampleTest extends TestCase
             ->assertViewIs('pages.home')
             ->assertSee('Felipe A. Gonzalez')
             ->assertSee('id="proyectos"', false)
-            ->assertSee('id="contacto"', false);
+            ->assertSee('id="contacto"', false)
+            ->assertSee('GitLab CI/CD');
     }
 
     public function test_brand_assets_are_configured_and_available(): void
