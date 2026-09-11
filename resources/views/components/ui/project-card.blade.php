@@ -2,21 +2,36 @@
     'name',
     'description',
     'technologies' => [],
-    'image',
+    'image' => null,
     'imageAlt' => null,
     'type',
-    'href',
+    'href' => null,
 ])
 
+@php
+    $contentTag = $href ? 'a' : 'div';
+@endphp
+
 <article {{ $attributes->class('project-card group') }}>
-    <a href="{{ $href }}" class="flex h-full flex-col rounded-[inherit]" aria-label="Ver proyecto {{ $name }}">
+    <{{ $contentTag }}
+        @if ($href)
+            href="{{ $href }}"
+        @endif
+        class="flex h-full flex-col rounded-[inherit]"
+    >
         <div class="aspect-[16/10] overflow-hidden border-b border-metal-dark/30 bg-surface-raised">
-            <img
-                src="{{ $image }}"
-                alt="{{ $imageAlt ?? "Vista previa del proyecto {$name}" }}"
-                class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
-                loading="lazy"
-            >
+            @if ($image)
+                <img
+                    src="{{ $image }}"
+                    alt="{{ $imageAlt ?? "Vista previa del proyecto {$name}" }}"
+                    class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                    loading="lazy"
+                >
+            @else
+                <div class="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,rgb(37_99_235_/_0.2),transparent_65%)]">
+                    <span class="font-mono text-sm tracking-[0.2em] text-subtle uppercase">Imagen pendiente</span>
+                </div>
+            @endif
         </div>
 
         <div class="flex flex-1 flex-col p-6">
@@ -33,9 +48,11 @@
             @endif
 
             <span class="mt-7 inline-flex items-center gap-2 font-medium text-brand-light transition-colors group-hover:text-accent-hover">
-                Ver proyecto
-                <span aria-hidden="true">→</span>
+                {{ $href ? 'Ver proyecto' : 'Detalles próximamente' }}
+                @if ($href)
+                    <span aria-hidden="true">→</span>
+                @endif
             </span>
         </div>
-    </a>
+    </{{ $contentTag }}>
 </article>

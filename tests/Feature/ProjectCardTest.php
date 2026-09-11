@@ -33,4 +33,21 @@ class ProjectCardTest extends TestCase
         $this->assertStringContainsString('Proyecto personal', $html);
         $this->assertStringContainsString('/proyectos/portfolio', $html);
     }
+
+    public function test_project_card_supports_pending_images_and_links(): void
+    {
+        $html = Blade::render(
+            <<<'BLADE'
+                <x-ui.project-card
+                    name="Proyecto pendiente"
+                    description="Información pendiente de confirmar."
+                    type="Proyecto profesional"
+                />
+            BLADE,
+        );
+
+        $this->assertStringContainsString('Imagen pendiente', $html);
+        $this->assertStringContainsString('Detalles próximamente', $html);
+        $this->assertStringNotContainsString('href=""', $html);
+    }
 }
