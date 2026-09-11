@@ -1,28 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Felipe A. Gonzalez — Desarrollador de software')
+@section('title', 'Felipe A. Gonzalez — Software Developer, Systems Architect & DevOps')
 
 @section('content')
-    <section id="inicio" class="container-page flex min-h-[calc(100svh-5rem)] items-center py-20 lg:py-28">
-        <div class="max-w-3xl">
-            <p class="eyebrow">Desarrollador de software</p>
-
-            <h1 class="heading-display mt-6">
-                Hola, soy
-                <span class="text-gradient block">Felipe A. Gonzalez</span>
-            </h1>
-
-            <p class="mt-7 max-w-2xl text-body text-lg">
-                Desarrollador de software apasionado por crear soluciones que resuelvan problemas reales.
-                Aquí comparto mis proyectos, experiencias y lo que estoy aprendiendo en el camino.
-            </p>
-
-            <div class="mt-9 flex flex-wrap gap-4">
-                <x-ui.button href="#proyectos">Ver proyectos <span aria-hidden="true">→</span></x-ui.button>
-                <x-ui.button href="#sobre-mi" variant="secondary">Sobre mí</x-ui.button>
-            </div>
-        </div>
-    </section>
+    @include('partials.sections.hero')
 
     {{-- Las secciones se desarrollarán en sus issues. Estos límites mantienen estable la navegación base. --}}
     @foreach ([

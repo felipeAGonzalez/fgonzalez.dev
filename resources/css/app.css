@@ -56,7 +56,7 @@
 
 @layer components {
     .site-shell {
-        @apply relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_80%_10%,rgb(37_99_235_/_0.09),transparent_28%),linear-gradient(110deg,var(--color-canvas)_0%,#07182b_52%,#0c1623_100%)];
+        @apply relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_80%_10%,rgb(37_99_235_/_0.09),transparent_28%),linear-gradient(110deg,var(--color-canvas)_0%,#07182b_52%,#0c1623_100%)];
     }
 
     .site-header {
@@ -124,9 +124,51 @@
         @apply font-medium text-brand-light underline-offset-4 transition-colors hover:text-accent-hover hover:underline;
     }
 
+    .role-tag {
+        @apply flex items-center gap-2;
+    }
+
+    .role-tag::before {
+        content: '';
+        @apply size-1.5 rounded-full bg-accent shadow-[0_0_12px_var(--color-accent)];
+    }
+
+    .hero-visual {
+        @apply relative mx-auto flex aspect-square w-full max-w-[30rem] items-center justify-center;
+    }
+
+    .hero-orbit {
+        @apply absolute rounded-full border border-brand-light/20;
+    }
+
+    .hero-orbit-outer {
+        @apply inset-[5%];
+    }
+
+    .hero-orbit-inner {
+        @apply inset-[18%] border-dashed border-accent/20;
+    }
+
+    .hero-glow {
+        @apply absolute inset-[24%] rounded-full bg-brand/20 blur-3xl;
+    }
+
+    .hero-code {
+        @apply absolute rounded-lg border border-white/10 bg-surface/80 px-3 py-2 font-mono text-xs text-accent shadow-card backdrop-blur;
+    }
+
+    .hero-code-top {
+        @apply top-[13%] right-[4%];
+    }
+
+    .hero-code-bottom {
+        @apply bottom-[15%] left-[5%];
+    }
+
     .tech-chip {
         @apply rounded-full border border-metal-dark/30 bg-canvas/55 px-3 py-1.5 font-mono text-xs text-muted transition-colors group-hover:border-brand-light/30 group-hover:text-metal;
     }
+
     .placeholder-content {
         @apply text-sm leading-7 text-subtle italic;
     }
