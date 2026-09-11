@@ -123,6 +123,10 @@
     .text-link {
         @apply font-medium text-brand-light underline-offset-4 transition-colors hover:text-accent-hover hover:underline;
     }
+
+    .placeholder-content {
+        @apply text-sm leading-7 text-subtle italic;
+    }
     .social-link {
         @apply rounded-lg border border-white/10 px-3 py-2 text-xs font-medium text-muted transition-colors hover:border-brand-light/50 hover:text-brand-light;
     }

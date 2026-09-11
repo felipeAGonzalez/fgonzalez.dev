@@ -18,6 +18,7 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertViewIs('pages.home')
             ->assertSee('Felipe A. Gonzalez')
+            ->assertSee('Ingeniería en Computación')
             ->assertSee('id="proyectos"', false)
             ->assertSee('id="contacto"', false)
             ->assertSee('aria-controls="mobile-navigation"', false);
