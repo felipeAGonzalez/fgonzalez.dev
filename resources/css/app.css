@@ -119,4 +119,24 @@
     .text-link {
         @apply font-medium text-brand-light underline-offset-4 transition-colors hover:text-accent-hover hover:underline;
     }
+
+    .placeholder-content {
+        @apply text-sm leading-7 text-subtle italic;
+    }
+
+    .timeline {
+        @apply relative ml-3 border-l border-brand-light/25 pl-8 sm:ml-5 sm:pl-12;
+    }
+
+    .timeline-item {
+        @apply relative;
+    }
+
+    .timeline-item + .timeline-item {
+        @apply mt-8;
+    }
+
+    .timeline-marker {
+        @apply absolute top-7 -left-[2.58rem] size-4 rounded-full border-4 border-canvas bg-accent shadow-[0_0_18px_rgb(34_211_238_/_0.5)] sm:-left-[3.58rem];
+    }
 }
