@@ -1,5 +1,5 @@
 // Include managed images in both the Vite development server and production manifest.
-import.meta.glob('../images/**/*.{png,jpg,jpeg,webp,avif,svg}', {
+import.meta.glob(['../images/**/*.{png,jpg,jpeg,webp,avif,svg}', '!../images/brand/*.png'], {
     eager: true,
     query: '?url',
     import: 'default',
@@ -37,8 +37,10 @@ if (menuToggle && mobileMenu) {
         }
     });
 
-    window.addEventListener('resize', () => {
-        if (window.matchMedia('(min-width: 1280px)').matches) {
+    const desktopNavigation = window.matchMedia('(min-width: 1280px)');
+
+    desktopNavigation.addEventListener('change', (event) => {
+        if (event.matches) {
             setMenuOpen(false);
         }
     });
