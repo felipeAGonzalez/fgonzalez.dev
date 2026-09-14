@@ -1,6 +1,8 @@
-@extends('layouts.app')
-
-@section('title', 'Felipe A. Gonzalez — Software Developer, Systems Architect & DevOps')
+@extends('layouts.app', [
+    'seoTitle' => config('seo.home.title'),
+    'seoDescription' => config('seo.home.description'),
+    'seoCanonical' => route('home'),
+])
 
 @section('content')
     @include('partials.sections.hero')

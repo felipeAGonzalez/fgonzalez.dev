@@ -1,6 +1,8 @@
-@extends('layouts.app')
-
-@section('title', "{$project['name']} — Proyectos de Felipe A. Gonzalez")
+@extends('layouts.app', [
+    'seoTitle' => "{$project['name']} | Proyectos de Felipe A. Gonzalez",
+    'seoDescription' => $project['seo_description'] ?? $project['description'],
+    'seoCanonical' => route('projects.show', $project['slug']),
+])
 
 @section('content')
     <article class="section-space">
