@@ -28,7 +28,7 @@
     --text-display--line-height: 1.05;
     --text-display--letter-spacing: -0.035em;
 
-    --spacing-section: clamp(5rem, 10vw, 8rem);
+    --spacing-section: clamp(4rem, 10vw, 8rem);
     --radius-card: 1.25rem;
     --shadow-brand: 0 18px 45px rgb(37 99 235 / 0.2);
     --shadow-card: 0 24px 60px rgb(0 0 0 / 0.2);
@@ -97,7 +97,7 @@
     }
 
     .button {
-        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3 font-medium transition duration-200;
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 font-medium transition duration-200 sm:px-7;
     }
 
     .button-primary {

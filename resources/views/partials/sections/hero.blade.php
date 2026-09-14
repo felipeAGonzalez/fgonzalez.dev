@@ -1,4 +1,4 @@
-<section id="inicio" class="container-page relative grid min-h-[calc(100svh-5rem)] scroll-mt-20 items-center gap-12 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:py-28">
+<section id="inicio" class="container-page relative grid min-h-[calc(100svh-5rem)] scroll-mt-20 items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:py-28">
     <div class="relative z-10 max-w-3xl">
         <p class="eyebrow">Software Developer · Systems Architect · DevOps</p>
 
