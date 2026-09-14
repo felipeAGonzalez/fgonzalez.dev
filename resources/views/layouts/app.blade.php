@@ -9,10 +9,12 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>
+        <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
         <div class="site-shell">
             @include('partials.header')
 
-            <main>
+            <main id="main-content" tabindex="-1">
                 @yield('content')
             </main>
         </div>

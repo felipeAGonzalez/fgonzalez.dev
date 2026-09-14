@@ -17,7 +17,13 @@ if (menuToggle && mobileMenu) {
     };
 
     menuToggle.addEventListener('click', () => {
-        setMenuOpen(menuToggle.getAttribute('aria-expanded') !== 'true');
+        const open = menuToggle.getAttribute('aria-expanded') !== 'true';
+
+        setMenuOpen(open);
+
+        if (open) {
+            mobileMenu.querySelector('a')?.focus();
+        }
     });
 
     mobileMenu.querySelectorAll('a').forEach((link) => {

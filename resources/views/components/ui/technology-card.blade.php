@@ -8,9 +8,9 @@
         <h3 class="text-lg font-semibold text-foreground">{{ $title }}</h3>
     </div>
 
-    <div class="mt-6 flex flex-wrap gap-2">
+    <ul class="mt-6 flex flex-wrap gap-2" aria-label="Tecnologías de {{ $title }}">
         @foreach ($technologies as $technology)
-            <span class="tech-chip">{{ $technology }}</span>
+            <li class="tech-chip">{{ $technology }}</li>
         @endforeach
-    </div>
+    </ul>
 </x-ui.card>
