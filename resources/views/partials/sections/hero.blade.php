@@ -28,7 +28,13 @@
         <div class="hero-orbit hero-orbit-outer"></div>
         <div class="hero-orbit hero-orbit-inner"></div>
         <div class="hero-glow"></div>
-        <x-brand.image variant="isotype" alt="" class="relative z-10 w-[min(72vw,25rem)] drop-shadow-[0_24px_55px_rgb(34_211_238_/_0.16)]" />
+        <x-brand.image
+            variant="isotype"
+            alt=""
+            class="relative z-10 w-[min(72vw,25rem)] drop-shadow-[0_24px_55px_rgb(34_211_238_/_0.16)]"
+            decoding="async"
+            fetchpriority="high"
+        />
         <span class="hero-code hero-code-top">&lt;/&gt;</span>
         <span class="hero-code hero-code-bottom">01</span>
     </div>
