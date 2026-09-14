@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+        @php
+            $pageTitle = $seoTitle ?? config('seo.default.title');
+            $pageDescription = $seoDescription ?? config('seo.default.description');
+            $canonicalUrl = $seoCanonical ?? url()->current();
+        @endphp
+
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>@yield('title', config('app.name', 'Felipe A. Gonzalez'))</title>
+        <title>{{ $pageTitle }}</title>
+        <meta name="description" content="{{ $pageDescription }}">
+        <link rel="canonical" href="{{ $canonicalUrl }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
