@@ -54,10 +54,26 @@ class ContactFormTest extends TestCase
         Mail::assertNothingSent();
     }
 
+    public function test_valid_message_is_not_reported_as_sent_with_a_non_delivering_mailer(): void
+    {
+        Mail::fake();
+        config()->set('portfolio.contact.recipient', 'owner@example.test');
+        config()->set('mail.default', 'log');
+
+        $this->post(route('contact.store'), $this->validMessage)
+            ->assertRedirect(route('home').'#contacto')
+            ->assertSessionHas('contact_unavailable')
+            ->assertSessionMissing('contact_success')
+            ->assertSessionHasInput('email', $this->validMessage['email']);
+
+        Mail::assertNothingSent();
+    }
+
     public function test_valid_message_is_sent_when_a_recipient_is_configured(): void
     {
         Mail::fake();
         config()->set('portfolio.contact.recipient', 'owner@example.test');
+        config()->set('mail.default', 'smtp');
 
         $this->post(route('contact.store'), $this->validMessage)
             ->assertRedirect(route('home').'#contacto')

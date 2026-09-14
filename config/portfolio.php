@@ -9,6 +9,7 @@ return [
 
     'contact' => [
         'recipient' => env('PORTFOLIO_CONTACT_RECIPIENT'),
+        'non_delivering_mailers' => ['array', 'log'],
     ],
 
     'cv' => [

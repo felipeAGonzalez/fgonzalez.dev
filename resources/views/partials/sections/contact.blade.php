@@ -19,11 +19,14 @@
                 <x-ui.cv-link />
             </div>
 
-            @unless (config('portfolio.contact.recipient'))
+            @if (
+                ! config('portfolio.contact.recipient') ||
+                in_array(config('mail.default'), config('portfolio.contact.non_delivering_mailers', []), true)
+            )
                 <p class="placeholder-content mt-8 max-w-md">
-                    Envío pendiente de configurar: define PORTFOLIO_CONTACT_RECIPIENT para habilitar la entrega de mensajes.
+                    Envío pendiente de configurar: define PORTFOLIO_CONTACT_RECIPIENT y un MAIL_MAILER con entrega real.
                 </p>
-            @endunless
+            @endif
         </div>
 
         <div class="surface-card">

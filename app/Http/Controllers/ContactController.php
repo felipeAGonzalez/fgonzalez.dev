@@ -12,12 +12,14 @@ class ContactController extends Controller
     public function store(StoreContactMessageRequest $request): RedirectResponse
     {
         $recipient = config('portfolio.contact.recipient');
+        $mailer = config('mail.default');
+        $nonDeliveringMailers = config('portfolio.contact.non_delivering_mailers', []);
 
-        if (! $recipient) {
+        if (! $recipient || in_array($mailer, $nonDeliveringMailers, true)) {
             return redirect()
                 ->to(route('home').'#contacto')
                 ->withInput()
-                ->with('contact_unavailable', 'El canal de envío aún no está configurado. Tus datos fueron validados, pero el mensaje no se envió.');
+                ->with('contact_unavailable', 'El canal de envío aún no está configurado para entrega real. Tus datos fueron validados, pero el mensaje no se envió.');
         }
 
         Mail::to($recipient)->send(new ContactMessage($request->validated()));
