@@ -45,17 +45,17 @@
 
             <div class="mt-16 grid gap-6 lg:grid-cols-3">
                 <x-ui.card>
-                    <p class="text-sm font-medium text-accent">Problema</p>
+                    <h2 class="text-sm font-medium text-accent">Problema</h2>
                     <p class="mt-4 text-body">{{ $project['problem'] }}</p>
                 </x-ui.card>
 
                 <x-ui.card>
-                    <p class="text-sm font-medium text-accent">Solución</p>
+                    <h2 class="text-sm font-medium text-accent">Solución</h2>
                     <p class="mt-4 text-body">{{ $project['solution'] }}</p>
                 </x-ui.card>
 
                 <x-ui.card>
-                    <p class="text-sm font-medium text-accent">Arquitectura</p>
+                    <h2 class="text-sm font-medium text-accent">Arquitectura</h2>
                     <p class="mt-4 text-body">{{ $project['architecture'] }}</p>
                 </x-ui.card>
             </div>

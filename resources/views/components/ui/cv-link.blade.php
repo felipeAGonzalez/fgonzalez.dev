@@ -20,7 +20,7 @@
     <span
         aria-disabled="true"
         title="CV pendiente de publicar"
-        {{ $attributes->class('button button-secondary cursor-not-allowed opacity-45') }}
+        {{ $attributes->class('button button-secondary cursor-not-allowed opacity-60') }}
     >
         {{ $slot->isEmpty() ? 'CV pendiente' : $slot }}
     </span>

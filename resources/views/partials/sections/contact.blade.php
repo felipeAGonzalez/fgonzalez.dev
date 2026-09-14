@@ -30,6 +30,17 @@
         </div>
 
         <div class="surface-card">
+            @if ($errors->any())
+                <div class="mb-6 rounded-xl border border-red-400/40 bg-red-400/10 p-4 text-sm text-metal" role="alert">
+                    <p class="font-medium text-foreground">Revisa los campos señalados antes de enviar el mensaje.</p>
+                    <ul class="mt-2 list-disc space-y-1 pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @if (session('contact_success'))
                 <div class="mb-6 rounded-xl border border-accent/30 bg-accent/10 p-4 text-sm text-metal" role="status">
                     {{ session('contact_success') }}

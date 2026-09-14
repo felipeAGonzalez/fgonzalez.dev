@@ -63,6 +63,10 @@
         @apply sticky top-0 z-50 border-b border-white/5 bg-canvas/80 backdrop-blur-xl;
     }
 
+    .skip-link {
+        @apply fixed top-3 left-3 z-[60] -translate-y-20 rounded-lg bg-foreground px-4 py-3 font-medium text-canvas shadow-card transition-transform focus:translate-y-0;
+    }
+
     .container-page {
         @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10;
     }
@@ -101,7 +105,7 @@
     }
 
     .button-primary {
-        @apply bg-gradient-to-r from-brand to-brand-hover text-white shadow-brand hover:-translate-y-0.5 hover:from-brand-hover hover:to-brand-light;
+        @apply bg-gradient-to-r from-blue-700 to-brand text-white shadow-brand hover:-translate-y-0.5 hover:from-brand hover:to-blue-700;
     }
 
     .button-secondary {
@@ -171,6 +175,10 @@
 
     .project-card {
         @apply overflow-hidden rounded-card border border-metal-dark/30 bg-surface/80 shadow-card backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-brand-light/50;
+    }
+
+    .project-card:focus-within {
+        @apply border-brand-light ring-2 ring-brand-light/40 ring-offset-2 ring-offset-canvas;
     }
 
     .form-label {

@@ -39,10 +39,13 @@
                     @if ($link['external']) target="_blank" rel="noopener noreferrer" @endif
                 >
                     {{ $link['label'] }}
+                    @if ($link['external'])
+                        <span class="sr-only"> (se abre en una pestaña nueva)</span>
+                    @endif
                 </a>
             @else
                 <span
-                    class="social-link inline-flex cursor-not-allowed opacity-45"
+                    class="social-link inline-flex cursor-not-allowed opacity-60"
                     aria-disabled="true"
                     title="Pendiente de configurar"
                 >
