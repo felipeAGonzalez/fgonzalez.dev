@@ -2,6 +2,9 @@
     'seoTitle' => config('seo.home.title'),
     'seoDescription' => config('seo.home.description'),
     'seoCanonical' => route('home'),
+    'seoType' => 'website',
+    'seoImage' => config('brand.assets.logotype'),
+    'seoImageAlt' => config('brand.alt.logotype'),
 ])
 
 @section('content')

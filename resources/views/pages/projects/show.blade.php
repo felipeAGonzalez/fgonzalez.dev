@@ -2,6 +2,9 @@
     'seoTitle' => "{$project['name']} | Proyectos de Felipe A. Gonzalez",
     'seoDescription' => $project['seo_description'] ?? $project['description'],
     'seoCanonical' => route('projects.show', $project['slug']),
+    'seoType' => 'article',
+    'seoImage' => $project['image'] ?? config('brand.assets.logotype'),
+    'seoImageAlt' => $project['image_alt'] ?? config('brand.alt.logotype'),
 ])
 
 @section('content')
