@@ -149,28 +149,92 @@ jobs:
             echo 'Prueba completada. Eliminando contenedor temporal...'
             docker rm -f fgonzalez-test
 
-            echo 'Reemplazando versión actual...'
-            docker rm -f fgonzalez >/dev/null 2>&1 || true
+           echo 'Preparando reemplazo con rollback...'
 
-            docker run -d \
-              --name fgonzalez \
-              -p 39879:80 \
-              -v \$HOME/fgonzalez/.env:/var/www/html/.env:ro \
-              -v \$HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
-              \$IMAGE
+            docker rm -f fgonzalez-rollback >/dev/null 2>&1 || true
 
-            echo 'Comprobando despliegue definitivo...'
+            if docker inspect fgonzalez >/dev/null 2>&1; then
+                OLD_IMAGE=$(docker inspect fgonzalez --format='{{.Config.Image}}')
+                echo "Versión anterior: $OLD_IMAGE"
 
-            for i in \$(seq 1 20); do
-              if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
-                echo 'Deploy completado correctamente.'
-                exit 0
-              fi
+                docker stop fgonzalez
+                docker rename fgonzalez fgonzalez-rollback
+            else
+                echo 'No existe una versión anterior.'
+                OLD_IMAGE=''
+            fi
 
-              sleep 2
+            echo 'Levantando nueva versión...'
+
+            if ! docker run -d \
+                --name fgonzalez \
+                -p 39879:80 \
+                -v $HOME/fgonzalez/.env:/var/www/html/.env:ro \
+                -v $HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
+                $IMAGE
+            then
+                echo 'No fue posible iniciar la nueva versión.'
+
+                if docker inspect fgonzalez-rollback >/dev/null 2>&1; then
+                    echo 'Restaurando versión anterior...'
+                    docker rename fgonzalez-rollback fgonzalez
+                    docker start fgonzalez
+                fi
+
+                exit 1
+            fi
+
+            echo 'Comprobando nueva versión...'
+
+            DEPLOY_OK=false
+
+            for i in $(seq 1 20); do
+                if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
+                    DEPLOY_OK=true
+                    break
+                fi
+
+                echo "Intento $i/20: aplicación todavía no disponible..."
+                sleep 2
             done
 
-            echo 'La versión definitiva no respondió.'
-            docker logs fgonzalez
+            if [ "$DEPLOY_OK" = "true" ]; then
+                echo 'Nueva versión saludable.'
+
+                docker rm fgonzalez-rollback >/dev/null 2>&1 || true
+
+                echo "Deploy completado correctamente con imagen: $IMAGE"
+                exit 0
+            fi
+
+            echo 'La nueva versión no respondió correctamente.'
+            echo 'Logs de la nueva versión:'
+
+            docker logs --tail 100 fgonzalez || true
+
+            echo 'Iniciando rollback...'
+
+            docker rm -f fgonzalez
+
+            if docker inspect fgonzalez-rollback >/dev/null 2>&1; then
+                docker rename fgonzalez-rollback fgonzalez
+                docker start fgonzalez
+
+                echo 'Comprobando versión restaurada...'
+
+                for i in $(seq 1 20); do
+                    if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
+                        echo "Rollback completado correctamente a: $OLD_IMAGE"
+                        exit 1
+                    fi
+
+                    sleep 2
+                done
+
+                echo 'CRÍTICO: el rollback tampoco respondió.'
+                exit 1
+            fi
+
+            echo 'No existe contenedor anterior para rollback.'
             exit 1
           "
