@@ -109,132 +109,102 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           IMAGE_TAG: sha-${{ github.sha }}
         run: |
-          ssh -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "
-            set -e
+          ssh -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" \
+            "DOCKERHUB_USERNAME='$DOCKERHUB_USERNAME' IMAGE_TAG='$IMAGE_TAG' bash -s" <<'REMOTE'
+          set -e
 
-            IMAGE='$DOCKERHUB_USERNAME/fgonzalez:$IMAGE_TAG'
+          IMAGE="$DOCKERHUB_USERNAME/fgonzalez:$IMAGE_TAG"
 
-            echo 'Descargando nueva imagen...'
-            docker pull \$IMAGE
+          echo "Descargando nueva imagen..."
+          docker pull "$IMAGE"
 
-            echo 'Eliminando contenedor temporal anterior si existe...'
-            docker rm -f fgonzalez-test >/dev/null 2>&1 || true
+          echo "Preparando reemplazo con rollback..."
 
-            echo 'Levantando nueva versión temporal...'
-            docker run -d \
-              --name fgonzalez-test \
-              -p 39880:80 \
-              -v \$HOME/fgonzalez/.env:/var/www/html/.env:ro \
-              -v \$HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
-              \$IMAGE
+          docker rm -f fgonzalez-rollback >/dev/null 2>&1 || true
 
-            echo 'Esperando que Laravel responda...'
+          OLD_IMAGE=""
 
-            for i in \$(seq 1 20); do
-              if curl -fsS http://127.0.0.1:39880/ >/dev/null; then
-                echo 'Nueva versión saludable.'
-                break
+          if docker inspect fgonzalez >/dev/null 2>&1; then
+              OLD_IMAGE=$(docker inspect fgonzalez --format='{{.Config.Image}}')
+              echo "Versión anterior: $OLD_IMAGE"
+
+              docker stop fgonzalez
+              docker rename fgonzalez fgonzalez-rollback
+          else
+              echo "No existe una versión anterior."
+          fi
+
+          echo "Levantando nueva versión..."
+
+          if ! docker run -d \
+              --name fgonzalez \
+              -p 39879:80 \
+              -v "$HOME/fgonzalez/.env:/var/www/html/.env:ro" \
+              -v "$HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite" \
+              "$IMAGE"
+          then
+              echo "No fue posible iniciar la nueva versión."
+
+              if docker inspect fgonzalez-rollback >/dev/null 2>&1; then
+                  echo "Restaurando versión anterior..."
+                  docker rename fgonzalez-rollback fgonzalez
+                  docker start fgonzalez
               fi
 
-              if [ \"\$i\" -eq 20 ]; then
-                echo 'La nueva versión no respondió correctamente.'
-                docker logs fgonzalez-test
-                docker rm -f fgonzalez-test
-                exit 1
+              exit 1
+          fi
+
+          echo "Comprobando nueva versión..."
+
+          DEPLOY_OK=false
+
+          for i in $(seq 1 20); do
+              if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
+                  DEPLOY_OK=true
+                  break
               fi
 
+              echo "Intento $i/20: aplicación todavía no disponible..."
               sleep 2
-            done
+          done
 
-            echo 'Prueba completada. Eliminando contenedor temporal...'
-            docker rm -f fgonzalez-test
+          if [ "$DEPLOY_OK" = "true" ]; then
+              echo "Nueva versión saludable."
 
-           echo 'Preparando reemplazo con rollback...'
+              docker rm fgonzalez-rollback >/dev/null 2>&1 || true
 
-            docker rm -f fgonzalez-rollback >/dev/null 2>&1 || true
+              echo "Deploy completado correctamente con imagen: $IMAGE"
+              exit 0
+          fi
 
-            if docker inspect fgonzalez >/dev/null 2>&1; then
-                OLD_IMAGE=$(docker inspect fgonzalez --format='{{.Config.Image}}')
-                echo "Versión anterior: $OLD_IMAGE"
+          echo "La nueva versión no respondió correctamente."
+          echo "Logs de la nueva versión:"
+          docker logs --tail 100 fgonzalez || true
 
-                docker stop fgonzalez
-                docker rename fgonzalez fgonzalez-rollback
-            else
-                echo 'No existe una versión anterior.'
-                OLD_IMAGE=''
-            fi
+          echo "Iniciando rollback..."
 
-            echo 'Levantando nueva versión...'
+          docker rm -f fgonzalez
 
-            if ! docker run -d \
-                --name fgonzalez \
-                -p 39879:80 \
-                -v $HOME/fgonzalez/.env:/var/www/html/.env:ro \
-                -v $HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
-                $IMAGE
-            then
-                echo 'No fue posible iniciar la nueva versión.'
+          if docker inspect fgonzalez-rollback >/dev/null 2>&1; then
+              docker rename fgonzalez-rollback fgonzalez
+              docker start fgonzalez
 
-                if docker inspect fgonzalez-rollback >/dev/null 2>&1; then
-                    echo 'Restaurando versión anterior...'
-                    docker rename fgonzalez-rollback fgonzalez
-                    docker start fgonzalez
-                fi
+              echo "Comprobando versión restaurada..."
 
-                exit 1
-            fi
+              for i in $(seq 1 20); do
+                  if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
+                      echo "Rollback completado correctamente a: $OLD_IMAGE"
+                      exit 1
+                  fi
 
-            echo 'Comprobando nueva versión...'
+                  sleep 2
+              done
 
-            DEPLOY_OK=false
+              echo "CRÍTICO: el rollback tampoco respondió."
+              exit 1
+          fi
 
-            for i in $(seq 1 20); do
-                if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
-                    DEPLOY_OK=true
-                    break
-                fi
-
-                echo "Intento $i/20: aplicación todavía no disponible..."
-                sleep 2
-            done
-
-            if [ "$DEPLOY_OK" = "true" ]; then
-                echo 'Nueva versión saludable.'
-
-                docker rm fgonzalez-rollback >/dev/null 2>&1 || true
-
-                echo "Deploy completado correctamente con imagen: $IMAGE"
-                exit 0
-            fi
-
-            echo 'La nueva versión no respondió correctamente.'
-            echo 'Logs de la nueva versión:'
-
-            docker logs --tail 100 fgonzalez || true
-
-            echo 'Iniciando rollback...'
-
-            docker rm -f fgonzalez
-
-            if docker inspect fgonzalez-rollback >/dev/null 2>&1; then
-                docker rename fgonzalez-rollback fgonzalez
-                docker start fgonzalez
-
-                echo 'Comprobando versión restaurada...'
-
-                for i in $(seq 1 20); do
-                    if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
-                        echo "Rollback completado correctamente a: $OLD_IMAGE"
-                        exit 1
-                    fi
-
-                    sleep 2
-                done
-
-                echo 'CRÍTICO: el rollback tampoco respondió.'
-                exit 1
-            fi
-
-            echo 'No existe contenedor anterior para rollback.'
-            exit 1
+          echo "No existe contenedor anterior para rollback."
+          exit 1
+          REMOTE
           "
