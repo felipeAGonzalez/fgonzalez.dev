@@ -207,4 +207,3 @@ jobs:
           echo "No existe contenedor anterior para rollback."
           exit 1
           REMOTE
-          "
