@@ -84,94 +84,93 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    needs: docker
 
-deploy:
-  name: Deploy to VPS
-  runs-on: ubuntu-latest
-  needs: docker
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
 
-  steps:
-    - name: Configure SSH
-      run: |
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
 
-        printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
 
-        printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-        chmod 600 ~/.ssh/known_hosts
+      - name: Deploy
+        env:
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_USER: ${{ vars.VPS_USER }}
+          VPS_PORT: ${{ vars.VPS_PORT }}
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+          IMAGE_TAG: sha-${{ github.sha }}
+        run: |
+          ssh -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "
+            set -e
 
-    - name: Deploy
-      env:
-        VPS_HOST: ${{ vars.VPS_HOST }}
-        VPS_USER: ${{ vars.VPS_USER }}
-        VPS_PORT: ${{ vars.VPS_PORT }}
-        DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-        IMAGE_TAG: sha-${{ github.sha }}
-      run: |
-        ssh -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "
-          set -e
+            IMAGE='$DOCKERHUB_USERNAME/fgonzalez:$IMAGE_TAG'
 
-          IMAGE='$DOCKERHUB_USERNAME/fgonzalez:$IMAGE_TAG'
+            echo 'Descargando nueva imagen...'
+            docker pull \$IMAGE
 
-          echo 'Descargando nueva imagen...'
-          docker pull \$IMAGE
+            echo 'Eliminando contenedor temporal anterior si existe...'
+            docker rm -f fgonzalez-test >/dev/null 2>&1 || true
 
-          echo 'Eliminando contenedor temporal anterior si existe...'
-          docker rm -f fgonzalez-test >/dev/null 2>&1 || true
+            echo 'Levantando nueva versión temporal...'
+            docker run -d \
+              --name fgonzalez-test \
+              -p 39880:80 \
+              -v \$HOME/fgonzalez/.env:/var/www/html/.env:ro \
+              -v \$HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
+              \$IMAGE
 
-          echo 'Levantando nueva versión temporal...'
-          docker run -d \
-            --name fgonzalez-test \
-            -p 39880:80 \
-            -v \$HOME/fgonzalez/.env:/var/www/html/.env:ro \
-            -v \$HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
-            \$IMAGE
+            echo 'Esperando que Laravel responda...'
 
-          echo 'Esperando que Laravel responda...'
+            for i in \$(seq 1 20); do
+              if curl -fsS http://127.0.0.1:39880/ >/dev/null; then
+                echo 'Nueva versión saludable.'
+                break
+              fi
 
-          for i in \$(seq 1 20); do
-            if curl -fsS http://127.0.0.1:39880/ >/dev/null; then
-              echo 'Nueva versión saludable.'
-              break
-            fi
+              if [ \"\$i\" -eq 20 ]; then
+                echo 'La nueva versión no respondió correctamente.'
+                docker logs fgonzalez-test
+                docker rm -f fgonzalez-test
+                exit 1
+              fi
 
-            if [ \"\$i\" -eq 20 ]; then
-              echo 'La nueva versión no respondió correctamente.'
-              docker logs fgonzalez-test
-              docker rm -f fgonzalez-test
-              exit 1
-            fi
+              sleep 2
+            done
 
-            sleep 2
-          done
+            echo 'Prueba completada. Eliminando contenedor temporal...'
+            docker rm -f fgonzalez-test
 
-          echo 'Prueba completada. Eliminando contenedor temporal...'
-          docker rm -f fgonzalez-test
+            echo 'Reemplazando versión actual...'
+            docker rm -f fgonzalez >/dev/null 2>&1 || true
 
-          echo 'Reemplazando versión actual...'
-          docker rm -f fgonzalez >/dev/null 2>&1 || true
+            docker run -d \
+              --name fgonzalez \
+              -p 39879:80 \
+              -v \$HOME/fgonzalez/.env:/var/www/html/.env:ro \
+              -v \$HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
+              \$IMAGE
 
-          docker run -d \
-            --name fgonzalez \
-            -p 39879:80 \
-            -v \$HOME/fgonzalez/.env:/var/www/html/.env:ro \
-            -v \$HOME/fgonzalez/database/database.sqlite:/var/www/html/database/database.sqlite \
-            \$IMAGE
+            echo 'Comprobando despliegue definitivo...'
 
-          echo 'Comprobando despliegue definitivo...'
+            for i in \$(seq 1 20); do
+              if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
+                echo 'Deploy completado correctamente.'
+                exit 0
+              fi
 
-          for i in \$(seq 1 20); do
-            if curl -fsS http://127.0.0.1:39879/ >/dev/null; then
-              echo 'Deploy completado correctamente.'
-              exit 0
-            fi
+              sleep 2
+            done
 
-            sleep 2
-          done
-
-          echo 'La versión definitiva no respondió.'
-          docker logs fgonzalez
-          exit 1
-        "
+            echo 'La versión definitiva no respondió.'
+            docker logs fgonzalez
+            exit 1
+          "
