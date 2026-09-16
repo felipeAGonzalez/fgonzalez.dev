@@ -19,3 +19,5 @@ docker-compose*.yml
 
 README.md
 LICENSE
+bootstrap/cache/*.php
+public/hot
